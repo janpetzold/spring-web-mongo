@@ -1,0 +1,63 @@
+buildscript {
+    repositories {
+        maven { url "http://repo.spring.io/libs-snapshot" }
+        mavenLocal()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+
+/*
+ * Do NOT use eclipse-plugin since it will mess up the configuration and doesn't allow 
+ * publishing to Eclipse server. Use eclipse-wtp instead and execute it after every build
+ * or every added dependency.
+ */
+apply plugin: 'eclipse-wtp'
+
+// Targeting Java 1.7
+sourceCompatibility = 1.7
+
+repositories {
+   mavenCentral()
+   maven { 
+   	url "http://repo.spring.io/libs-snapshot" 
+   }
+}
+
+dependencies {
+   providedCompile 'javax.servlet:servlet-api:2.5'
+   
+   compile 'junit:junit:4.10'
+   compile 'log4j:log4j:1.2.16'
+   
+   compile 'org.springframework:spring-webmvc:3.2.2.RELEASE'
+   compile 'org.springframework.data:spring-data-mongodb:1.3.1.RELEASE'
+   compile 'org.springframework.data:spring-data-commons-core:1.4.1.RELEASE'
+   compile 'org.springframework.data:spring-data-jpa:1.4.1.RELEASE'
+   
+   // Add Jackson to return @ResponseBody as JSON
+   compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+
+   // Add Google Guava and Apache Commons for convenience
+   compile 'com.google.guava:guava:15.0'
+   compile 'org.apache.commons:commons-lang3:3.0'
+   
+   runtime 'javax.servlet:jstl:1.1.2'
+}
+
+// Define default tasks with clean (otherwise WebApp libraries in Eclipse don't get updated)
+defaultTasks 'clean', 'build', 'cleanEclipseWtp', 'eclipseWtp'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.8'
+
+    // Increase RAM for Gradle builds to speed up the process
+    def jvmOpts = "-Xmx1024m"
+    inputs.property("jvmOpts", jvmOpts)
+    doLast {
+        def optsEnvVar = "DEFAULT_JVM_OPTS"
+        scriptFile.write scriptFile.text.replace("$optsEnvVar=\"\"", "$optsEnvVar=\"$jvmOpts\"")
+        batchScript.write batchScript.text.replace("set $optsEnvVar=", "set $optsEnvVar=$jvmOpts")
+    }
+}
