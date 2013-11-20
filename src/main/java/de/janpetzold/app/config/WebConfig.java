@@ -1,5 +1,8 @@
 package de.janpetzold.app.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.mongodb.Mongo;
+import com.mongodb.ServerAddress;
 
 @Configuration
 @EnableWebMvc
@@ -20,7 +24,15 @@ public class WebConfig extends AbstractMongoConfiguration {
 
 	@Override
 	public Mongo mongo() throws Exception {
-		return new Mongo();
+		/* 
+		 * We have a replica set of three servers - add the all, since any of them 
+		 * might be become the (new) primary server.
+		 */
+		List<ServerAddress> servers = new ArrayList<>();
+		servers.add(new ServerAddress("localhost", 30000));
+		servers.add(new ServerAddress("localhost", 30001));
+		servers.add(new ServerAddress("localhost", 30002));
+		return new Mongo(servers);
 	}
 
 	@Override

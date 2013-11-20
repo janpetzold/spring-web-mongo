@@ -18,6 +18,7 @@ var reduce = function(country, population) {
 
 // Truncate results collection
 db.resultsTotalPopulation.remove();
+
 var command = db.cities.mapReduce(map, reduce, {out: "resultsTotalPopulation"});
 printjson(command);
 

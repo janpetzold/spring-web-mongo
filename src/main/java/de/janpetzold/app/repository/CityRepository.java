@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.core.aggregation.SkipOperation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,13 +18,18 @@ import de.janpetzold.app.model.City;
  *
  */
 @Repository
-public interface CityRepository extends MongoRepository<City, String>, CustomCityRepository {
+public interface CityRepository extends MongoRepository<City, String>, AdvancedCityRepository {
 	public City findOneByCity(String city);
 	
 	public List<City> findByCountry(String country);
 	
 	public Page<City> findAll(Pageable pageAble);
+	
+	public List<City> findByCity(String city);
+	
+	public Page<City> findByCity(String city, Pageable pageAble);
 
+	// Just for demonstration - this is how the @Query annotation would work
 	@Query("{'city' : 'berlin'}")
 	public List<City> test();
 	

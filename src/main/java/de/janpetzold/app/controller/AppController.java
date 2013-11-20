@@ -1,9 +1,11 @@
 package de.janpetzold.app.controller;
 
 import java.text.DateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,28 +19,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import de.janpetzold.app.model.City;
-import de.janpetzold.app.service.CityService;
+import de.janpetzold.app.model.Customer;
+import de.janpetzold.app.service.AppService;
 
 // TODO: Enable Logging
-// TODO: Create index on city name
 @Controller
 public class AppController {
-    private CityService cityService;
+    private AppService appService;
 	
+    // TODO: Maybe add a method that will create all necessary indexes. Protect that "somehow".
+    
 	@Autowired
-	public void setCityService(CityService cityService) {
-		this.cityService = cityService;
-	}
-
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		model.addAttribute("serverTime", dateFormat.format(date));
-		
-		return "home";
+	public void setCityService(AppService appService) {
+		this.appService = appService;
 	}
 	
 	@RequestMapping(value = "/addCity", method = RequestMethod.GET)
@@ -54,44 +47,50 @@ public class AppController {
 	@RequestMapping(value = "/readCity/{cityName}", method = RequestMethod.GET, produces = "application/json; charset=utf-8") 
 	@ResponseBody
 	public City readCity(@PathVariable String cityName) {
-		return cityService.getCity(cityName.toLowerCase());
+		return appService.getCity(cityName.toLowerCase());
 	}
 	
 	@RequestMapping(value = "/readCities/{countryCode}", method = RequestMethod.GET, produces = "application/json; charset=utf-8") 
 	@ResponseBody
 	public List<City> readByCountry(@PathVariable String countryCode) {
-		return cityService.getCitiesForCountry(countryCode);
+		return appService.getCitiesForCountry(countryCode);
 	}
 	
 	@RequestMapping(value = "/readAll", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public List<City> readAll()  {
-		return cityService.listCities();
+		return appService.listCities();
 	}
 	
 	@RequestMapping(value = "/readBiggest", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public Page<City> readBiggest()  {
-		return cityService.findBiggestCities();
+		return appService.findBiggestCities();
 	}
 	
 	@RequestMapping(value = "/readRandom", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public City readRandom()  {
-		return cityService.getRandom();
-	}
-	
-	@RequestMapping(value = "/test", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public List<City> test()  {
-		return cityService.test();
+		return appService.getRandom();
 	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public City add(@ModelAttribute("city") City city) {
 		// TODO: Add validation
-		return cityService.saveCity(city);
+		return appService.saveCity(city);
+	}
+	
+	@RequestMapping(value = "/readCustomers/{city}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public List<Customer> readCustomers(@PathVariable String city)  {
+		return appService.getCustomersForCity(city);
+	}
+	
+	@RequestMapping(value = "/readLocation/{userName}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public Collection<Map<String, Object>> readLocation(@PathVariable String userName)  {
+		return appService.getLocationForUser(userName);
 	}
 	
 }

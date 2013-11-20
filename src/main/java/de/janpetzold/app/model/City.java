@@ -12,7 +12,9 @@ public class City {
     private String id;
 	private String country;
 	private String city;
-    private String region;
+	// Can't use camelCase here since the variable name has to EXACTLY match the key value in the document
+	private String accentcity;
+	private String region;
     private Long population;
     private Float[] location;
 
@@ -30,6 +32,14 @@ public class City {
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+	
+	public String getAccentCity() {
+		return accentcity;
+	}
+
+	public void setAccentCity(String accentcity) {
+		this.accentcity = accentcity;
 	}
 
 	public String getRegion() {
@@ -67,7 +77,8 @@ public class City {
 	@Override
 	public String toString() {
 		return "City [id=" + id + ", country=" + country + ", city=" + city
-				+ ", region=" + region + ", population=" + population
-				+ ", location=" + Arrays.toString(location) + "]";
+				+ ", accentCity=" + accentcity + ", region=" + region
+				+ ", population=" + population + ", location="
+				+ Arrays.toString(location) + "]";
 	}
 }
