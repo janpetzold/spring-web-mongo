@@ -1,5 +1,7 @@
 var db = db.getSiblingDB('app');
 
+// TODO: What about write consistency?
+
 print("Creating index for the city names");
 db.cities.ensureIndex({ city: 1 });
 printjson(db.cities.getIndexes());

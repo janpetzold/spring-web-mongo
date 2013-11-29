@@ -34,6 +34,16 @@ public class AppController {
 		this.appService = appService;
 	}
 	
+	@RequestMapping(value = "/browse", method = RequestMethod.GET)
+	public ModelAndView browseCities() {
+		ModelAndView mv = new ModelAndView("browse");
+		
+		// Initially we list the top 10 cities
+		mv.addObject("cities", appService.findBiggestCities().getContent());
+		
+		return mv;
+	}
+	
 	@RequestMapping(value = "/addCity", method = RequestMethod.GET)
 	public ModelAndView addCity() {
 		City city = new City();
@@ -64,8 +74,8 @@ public class AppController {
 	
 	@RequestMapping(value = "/readBiggest", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public Page<City> readBiggest()  {
-		return appService.findBiggestCities();
+	public List<City> readBiggest()  {
+		return appService.findBiggestCities().getContent();
 	}
 	
 	@RequestMapping(value = "/readRandom", method = RequestMethod.GET, produces = "application/json")

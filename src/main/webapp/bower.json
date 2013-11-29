@@ -1,0 +1,21 @@
+{
+  "name": "spring-web-mongo",
+  "version": "0.0.1",
+  "homepage": "https://github.com/janpetzold/spring-web-mongo",
+  "authors": [
+    "Jan Petzold"
+  ],
+  "description": "Using MongoDB with Spring Data to implement a simple JSON db service",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "1.9"
+  }
+}

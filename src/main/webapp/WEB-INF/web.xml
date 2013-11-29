@@ -12,7 +12,7 @@
 	    </init-param>
 	    <init-param>
 	      <param-name>contextConfigLocation</param-name>
-	      <param-value>de.janpetzold.app.config.WebConfig</param-value>
+	      <param-value>de.janpetzold.app.config</param-value>
 	    </init-param>
   	</servlet>
 		

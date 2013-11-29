@@ -43,7 +43,7 @@ dependencies {
    compile 'com.google.guava:guava:15.0'
    compile 'org.apache.commons:commons-lang3:3.0'
    
-   runtime 'javax.servlet:jstl:1.1.2'
+   runtime 'javax.servlet:jstl:1.2'
 }
 
 // Define default tasks with clean (otherwise WebApp libraries in Eclipse don't get updated)

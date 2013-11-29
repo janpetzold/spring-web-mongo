@@ -1,8 +1,17 @@
+/**
+ * Generate a "customers" collection with documents that have the following fields:
+ * 
+ * firstName, familyName, city, code
+ * 
+ * The document will be generated based on the data in the people and cities collection. 
+ * It will be constructed randomly to produce a basically infinite number of "new" documents.
+ */
+
 var con = new Mongo("localhost:30000");
 var db = con.getDB('app');
 
 // How many entries shall be generated? Minimum: 100!
-var max = 100000;
+var numDocuments = 100000;
 
 var cityCount = db.cities.count();
 var peopleCount = db.people.count();
@@ -44,21 +53,22 @@ function readRandomData() {
 	};
 }
 
+// Drop old collection if it exists
 db.customers.drop();
 
-// ensure indexes on the queried columns
+// Ensure indexes exist on the queried columns
 db.cities.ensureIndex({accentcity: 1 });
 db.people.ensureIndex({name: 1 });
 db.people.ensureIndex({surname: 1 });
 
-// insert data in bulks to speed up the process
+// We will insert the documents in bulks to speed up the process
 var bulkCounter = 0;
 var personArray = [];
 
 // Track the time it takes to insert all documents
 var bench = new Date().getTime();
 
-for(var i = 0; i <= max; i++) {
+for(var i = 0; i <= numDocuments; i++) {
 	var person = readRandomData();
 
 	bulkCounter = bulkCounter + 1;
@@ -67,6 +77,7 @@ for(var i = 0; i <= max; i++) {
 		personArray.push(person);
 	}
 
+	// Insert after every 100 entries
 	if(bulkCounter >= 100) {
 		db.customers.insert(personArray);
 		bulkCounter = 0;

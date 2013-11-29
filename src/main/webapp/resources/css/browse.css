@@ -1,0 +1,26 @@
+/**
+ * HTML properties
+ */
+body {
+    /* padding due to fixed top menu */
+    padding-top: 70px;
+}
+
+/**
+ * Layout elements
+ */
+.l-hidden {
+    display: none;
+}
+
+.t-uppercase {
+	text-transform: uppercase;
+}
+
+/**
+ * Application elements
+ */
+.table-responsive {
+	border: 1px solid #DFDFDF;
+	border-radius: 5px;
+}
